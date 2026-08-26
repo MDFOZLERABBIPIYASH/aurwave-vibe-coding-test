@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Aurwave — Design Tokens
+ * See: docs/02-brand-and-design.md, docs/05-ui-ux-guidelines.md
+ *
+ * Brand-neutral placeholder palette. Replace with brand values when available.
+ * Tokens are defined on :root and respond to a system-preference dark scheme.
+ * A future toggle will stamp data-theme on <html>.
+ */
+
+:root {
+  /* Brand-neutral placeholder */
+  --color-primary: oklch(0.55 0.2 260);
+  --color-primary-foreground: oklch(0.99 0 0);
+
+  --color-neutral-50: oklch(0.985 0 0);
+  --color-neutral-100: oklch(0.97 0 0);
+  --color-neutral-200: oklch(0.92 0 0);
+  --color-neutral-300: oklch(0.87 0 0);
+  --color-neutral-400: oklch(0.7 0 0);
+  --color-neutral-500: oklch(0.55 0 0);
+  --color-neutral-600: oklch(0.45 0 0);
+  --color-neutral-700: oklch(0.35 0 0);
+  --color-neutral-800: oklch(0.22 0 0);
+  --color-neutral-900: oklch(0.15 0 0);
+  --color-neutral-950: oklch(0.1 0 0);
+
+  --color-accent: oklch(0.7 0.18 220);
+  --color-accent-foreground: oklch(0.99 0 0);
+
+  --color-background: oklch(0.99 0 0);
+  --color-foreground: oklch(0.15 0 0);
+
+  --color-muted: oklch(0.97 0 0);
+  --color-muted-foreground: oklch(0.45 0 0);
+
+  --color-border: oklch(0.92 0 0);
+  --color-ring: oklch(0.55 0.2 260 / 0.5);
+
+  /* Typography */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Inter", system-ui, sans-serif;
+
+  /* Motion */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-background: oklch(0.12 0 0);
+    --color-foreground: oklch(0.98 0 0);
+    --color-muted: oklch(0.18 0 0);
+    --color-muted-foreground: oklch(0.7 0 0);
+    --color-border: oklch(0.25 0 0);
+    --color-ring: oklch(0.7 0.18 260 / 0.5);
+  }
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Honor reduced motion per docs/06-animation-guidelines.md */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .container-px {
+    @apply px-5 sm:px-6 lg:px-8;
+  }
+}
