@@ -22,6 +22,15 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
 - **Phase 03 — Variant helper:** `src/lib/variants.ts` provides a tiny `variants()` helper (base + variant map + default variants) that resolves classes through `cn`, avoiding the `class-variance-authority` dependency.
 - **Phase 03 — Custom tailwind-merge config:** `src/lib/tailwind-merge.ts` extends `tailwind-merge` so the brand's `text-X-foreground` color tokens and the custom `text-body`, `text-display-xl`, etc. font-size scale don't collapse against each other. `cn` now uses this configured instance.
 - **Phase 03 — Dev showcase page:** `src/app/dev/components/page.tsx` (guarded to non-production builds, with `NEXT_PUBLIC_SHOW_DEV=true` opt-in for staging) renders every primitive in real layout for visual review.
+- **Phase 04 — Icon set:** `src/components/ui/Icon.tsx` ships four inline SVG icons (`MenuIcon`, `CloseIcon`, `ArrowRightIcon`, `ArrowUpRightIcon`) that inherit `currentColor` and need no external dependency.
+- **Phase 04 — Header (`src/components/layout/Header.tsx`):** sticky site header with a backdrop-blur background, brand wordmark, full primary nav (Home, Services, Work, About, Contact), and the primary "Start a Project" CTA at `lg`+. Below `lg`, the desktop nav collapses to a hamburger button that opens a full-screen animated menu with body scroll lock, ESC-to-close, focus return, and `inert`-based focus scoping.
+- **Phase 04 — Mobile menu hook (`src/hooks/use-mobile-menu.ts`):** encapsulates the open/close state, body scroll lock, ESC key, focus management (focus first link on open, return to toggle on close), and `inert` scoping of sibling content.
+- **Phase 04 — Footer (`src/components/layout/Footer.tsx`):** server-rendered footer with the wordmark, short description, three-column nav (Sitemap, Services, Contact with mailto), placeholder social links, copyright (auto year), and legal links to /privacy and /terms.
+- **Phase 04 — Routes:** added `/services`, `/work`, `/about`, `/contact`, `/privacy`, `/terms` pages with route-level `metadata` (title + description). Each page is a thin placeholder that ships the IA, brand voice, and structural primitives needed for the real content in Phase 06.
+- **Phase 04 — Contact form (`src/components/sections/ContactForm.tsx`):** client component with name, email, company, project type, budget, and message fields. Phase 04 ships a local success state; full validation and `/api/contact` server route land in Phase 06.
+- **Phase 04 — Error and not-found pages:** `src/app/not-found.tsx` (404 with home and contact CTAs) and `src/app/error.tsx` (global error boundary with `reset` and `error.digest` display).
+- **Phase 04 — Skip-to-content link:** added in the root layout, visible only on focus, jumps to `#main` so keyboard users bypass the nav.
+- **Phase 04 — Root layout wiring:** Header and Footer are mounted in `src/app/layout.tsx`, wrapping a `<main id="main">` element. The Header sets the `<body>` overflow lock and the Footer renders inside the document flow.
 
 ### Changed
 
@@ -30,11 +39,14 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
 - `src/components/ui/Button.tsx` adopts the new `variants()` helper from `@/lib/variants` for intent + size, and the `cn` re-export from `@/lib/variants` (same identity as `@/lib/cn`) is used inside the UI layer.
 - `src/lib/cn.ts` now uses the configured `twMerge` instance from `@/lib/tailwind-merge` so brand foreground and typographic scale classes merge cleanly.
 - `src/app/page.tsx` placeholder text now references Phase 05 explicitly (homepage sections coming next).
+- `playwright.config.ts` runs the production server on port `3030` (configurable via `PORT` env var) to avoid colliding with other dev servers on the default Next.js port. WebKit, Firefox, and Pixel-7 mobile projects remain configured.
+- `src/components/ui/index.ts` now also exports the icon set so consumers can `import { MenuIcon } from "@/components/ui"`.
 
 ### Fixed
 
 - Resolved a latent bug in `tailwind-merge` where the brand's `text-primary-foreground` / `text-accent-foreground` would be dropped when listed alongside `bg-primary` (the `text-X` group wasn't registered for the custom palette).
 - Resolved a latent bug where custom `text-body` / `text-display-xl` font-size tokens were being merged into the `text-*` color group; they are now in the `font-size` group and coexist with color classes.
+- Resolved a stale-state bug in the previous `usePrefersReducedMotion` test where the mocked `matchMedia` object captured `matches` by value rather than reading it as a live getter, so subsequent test mutations never reached the hook. The mock now uses a `get matches()` accessor and the test also covers mount-time read, listener updates, and unsubscribe on unmount.
 
 ### Testing
 
@@ -44,8 +56,11 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   - `cn` (3) — class merging, falsy filtering, last-wins conflict resolution.
   - `cn` re-export + `variants` helper (10) — defaults, selected variants, additional className conflict resolution, missing defaultVariants, unknown values; includes a regression test that `text-primary-foreground` survives alongside `bg-primary` and `text-body`.
   - `usePrefersReducedMotion` (5) — initial state, sync read on mount, listener change, unsubscribe on unmount, legacy `addListener` fallback.
-- `npm run build` — production build succeeds; static-rendered home route weighs 103 kB First Load JS; `/dev/components` is 3.46 kB and dev-only.
-- E2E (Playwright) — config wired and one smoke test added (`tests/e2e/home.spec.ts`); not run yet because the local web server is not exercised in this phase. Will run after the navigation header lands in Phase 04.
+- `npm run build` — production build succeeds; 11 routes are static-rendered (103 kB First Load JS shared, contact is the heaviest at 115 kB because it inlines the form).
+- `npm run test:e2e` — 60/60 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips (4 on the wrong viewport). Coverage:
+  - Home: title, wordmark, primary nav, mobile nav, primary CTA → /contact.
+  - Navigation: every route (`/`, `/services`, `/work`, `/about`, `/contact`, `/privacy`, `/terms`) loads with the expected title and H1; `/this-route-does-not-exist` returns 404 and renders the not-found page; footer renders Sitemap, Services, and Contact columns.
+  - Mobile menu: hamburger visible, opens menu, aria-expanded flips, ESC closes and returns focus to the toggle, tapping a link navigates and closes the menu.
 
 ### Security
 

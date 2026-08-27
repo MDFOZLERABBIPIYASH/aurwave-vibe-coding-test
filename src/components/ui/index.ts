@@ -24,3 +24,6 @@ export type { LinkProps } from "./Link";
 
 export { Reveal } from "./Reveal";
 export type { RevealProps } from "./Reveal";
+
+export { MenuIcon, CloseIcon, ArrowRightIcon, ArrowUpRightIcon } from "./Icon";
+export type { IconProps } from "./Icon";
