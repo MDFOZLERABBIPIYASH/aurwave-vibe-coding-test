@@ -42,6 +42,14 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   8. `TestimonialSection` — single placeholder social-proof block; real quotes land in Phase 08.
   9. `FinalCTASection` — "Have a project in mind?" + "Start a Conversation" CTA → `/contact`.
 - **Phase 05 — Sections barrel:** `src/components/sections/index.ts` re-exports every section component plus the contact form for tidy imports from `app/` routes.
+- **Phase 06 — Project catalog (`src/lib/projects.ts`):** single source of truth for project data. Six placeholder projects with slug, name, industry, summary, description, category (`web | ecommerce | brand`), services, accent gradient, full detail content (problem, approach, results), optional metrics, and year. Helpers: `getProject`, `allProjectSlugs`, `filterProjects`, `sortProjects`, plus a `projectCategories` list for the filter UI.
+- **Phase 06 — Work index (`/work`):** expanded to a real filterable grid. The hero mirrors the IA and the grid is mounted as a `<ProjectFilter>` client component inside a Suspense boundary (Next 15 requirement for `useSearchParams`). The filter is URL-driven via `?category=web|ecommerce|brand`, with an `aria-live` count, shareable links, and back/forward support.
+- **Phase 06 — Work detail (`/work/[slug]`):** static-rendered via `generateStaticParams`. Each page renders hero, problem / approach / results blocks, a "By the numbers" metrics aside, the next-project link, and a final CTA. Unknown slugs route to the global 404.
+- **Phase 06 — Services (`/services`):** expanded with an overview hero, six detailed service sections (Web Design, Web Development, UI/UX, E-commerce, Redesign, Performance) each with tagline + description + capability list, a methodology recap that links to `/#process`, and a closing CTA.
+- **Phase 06 — About (`/about`):** expanded with hero, three stat cards (years, projects, team size), mission block, six values in a 2×3 grid, and a closing CTA.
+- **Phase 06 — Contact form (`src/components/sections/ContactForm.tsx`):** upgraded to a real client. Validation is shared with the server via `src/lib/contact.ts`. The form tracks idle / submitting / success / error states, shows field-level error messages tied to inputs via `aria-describedby`, posts to `/api/contact`, and replaces itself with a thank-you panel on success.
+- **Phase 06 — Contact validation (`src/lib/contact.ts`):** shared `ContactPayload`, `ContactError`, `ContactResponse` types and a `validateContact` helper covering required fields, email format, and minimum message length. Used by both the client form and the API route.
+- **Phase 06 — Contact API (`/api/contact`):** Next.js route handler that parses JSON, validates with `validateContact`, returns `{ ok: true }` on success, or a `422` with field-level errors on validation failure. Stub delivery: the inquiry is logged to the server console. A real provider (Resend / Formspree / a CRM) is wired in a later phase.
 
 ### Changed
 
@@ -63,16 +71,19 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
 
 - `npm run lint` — passes with no warnings or errors.
 - `npm run type-check` — passes (strict mode, `noUncheckedIndexedAccess`).
-- `npm test` — 18/18 unit tests pass:
+- `npm test` — 24/24 unit tests pass:
   - `cn` (3) — class merging, falsy filtering, last-wins conflict resolution.
   - `cn` re-export + `variants` helper (10) — defaults, selected variants, additional className conflict resolution, missing defaultVariants, unknown values; includes a regression test that `text-primary-foreground` survives alongside `bg-primary` and `text-body`.
   - `usePrefersReducedMotion` (5) — initial state, sync read on mount, listener change, unsubscribe on unmount, legacy `addListener` fallback.
-- `npm run build` — production build succeeds; 11 routes are static-rendered (103 kB First Load JS shared; `/` is 152 kB because it inlines `motion` for the `Reveal` components; `/contact` is 115 kB because it inlines the form).
-- `npm run test:e2e` — 88/88 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips. Coverage:
+  - `validateContact` (6) — accepts valid payload, flags missing required fields, rejects invalid email, enforces 10-character minimum message, treats whitespace as empty, doesn't flag optional fields when missing.
+- `npm run build` — production build succeeds. 11 base routes are static-rendered; the 6 project pages at `/work/[slug]` are pre-rendered as SSG via `generateStaticParams`. First Load JS: shared 103 kB; `/` and `/work` 152 kB (inlines `motion`); `/services` and `/work/[slug]` 150 kB.
+- `npm run test:e2e` — 124/124 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips. Coverage:
   - Home: title, wordmark, primary nav, mobile nav, primary CTA → /contact.
   - Homepage sections (Phase 05): every section is present in the IA order, the hero shows the eyebrow + headline + both CTAs, services preview lists 4 services, selected work lists 3 projects, process lists all 5 phases, capabilities list every technology, final CTA navigates to /contact.
-  - Navigation: every route (`/`, `/services`, `/work`, `/about`, `/contact`, `/privacy`, `/terms`) loads with the expected title and H1; `/this-route-does-not-exist` returns 404 and renders the not-found page; footer renders Sitemap, Services, and Contact columns.
+  - Navigation: every route loads with the expected title and H1; unknown path returns 404; footer renders Sitemap, Services, Contact columns.
   - Mobile menu: hamburger visible, opens menu, aria-expanded flips, ESC closes and returns focus to the toggle, tapping a link navigates and closes the menu.
+  - Work (Phase 06): all 6 projects render initially; clicking a card navigates to `/work/[slug]`; the Web filter narrows the grid (asserted both via URL query and visible count); the detail page renders problem/approach/results blocks and a "Continue reading" link; unknown slugs return 404.
+  - Contact form (Phase 06): empty submit surfaces summary + per-field errors (verified via `[id$="-name-error"]` selectors); invalid email surfaces a clear error; valid submit posts to `/api/contact` (intercepted) and shows the success panel; 5xx from the API shows the error alert.
 
 ### Security
 
