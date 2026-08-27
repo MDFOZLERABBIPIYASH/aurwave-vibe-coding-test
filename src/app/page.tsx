@@ -1,16 +1,45 @@
+import {
+  HeroSection,
+  IntroductionSection,
+  ServicesPreviewSection,
+  SelectedWorkSection,
+  WhyAurwaveSection,
+  ProcessSection,
+  CapabilitiesSection,
+  TestimonialSection,
+  FinalCTASection,
+} from "@/components/sections";
+
+/**
+ * Homepage.
+ *
+ * Section order follows the user journey in
+ * `docs/03-information-architecture.md`:
+ *   1. Hero          — what we do, primary CTA
+ *   2. Introduction  — who we are, who we help
+ *   3. Services      — what we do, in detail
+ *   4. Selected Work — proof in shipped projects
+ *   5. Why Aurwave   — differentiation
+ *   6. Process       — how an engagement runs
+ *   7. Capabilities  — the technology stack
+ *   8. Testimonial   — social proof
+ *   9. Final CTA     — last call to action
+ *
+ * The Header and Footer are mounted in `app/layout.tsx` and wrap every
+ * page, so they are not imported here.
+ */
 export default function HomePage() {
   return (
-    <main className="container-px mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center py-24 text-center">
-      <p className="font-eyebrow mb-6 text-eyebrow uppercase text-muted-foreground">
-        Digital Design & Development Agency
-      </p>
-      <h1 className="text-display-xl max-w-3xl font-display font-semibold tracking-tight">
-        Aurwave
-      </h1>
-      <p className="mt-6 max-w-xl text-body-lg text-muted-foreground">
-        A modern digital agency crafting thoughtful, high-performing digital experiences.
-        Project bootstrap complete — homepage sections coming in Phase 05.
-      </p>
-    </main>
+    <>
+      <HeroSection />
+      <IntroductionSection />
+      <ServicesPreviewSection />
+      <SelectedWorkSection />
+      <WhyAurwaveSection />
+      <ProcessSection />
+      <CapabilitiesSection />
+      <TestimonialSection />
+      <FinalCTASection />
+    </>
   );
 }

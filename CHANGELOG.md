@@ -31,6 +31,17 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
 - **Phase 04 — Error and not-found pages:** `src/app/not-found.tsx` (404 with home and contact CTAs) and `src/app/error.tsx` (global error boundary with `reset` and `error.digest` display).
 - **Phase 04 — Skip-to-content link:** added in the root layout, visible only on focus, jumps to `#main` so keyboard users bypass the nav.
 - **Phase 04 — Root layout wiring:** Header and Footer are mounted in `src/app/layout.tsx`, wrapping a `<main id="main">` element. The Header sets the `<body>` overflow lock and the Footer renders inside the document flow.
+- **Phase 05 — Homepage sections (`src/components/sections/`):** nine purpose-built sections wired into `src/app/page.tsx` in the order required by `docs/03-information-architecture.md`:
+  1. `HeroSection` — eyebrow "Digital Design & Development Agency", display-XL headline, supporting body, primary "Start a Project" CTA + secondary "View our work" CTA. Staggered `Reveal` entrance, calm decorative gradient.
+  2. `IntroductionSection` — two-column trust block: who Aurwave is, what problems we solve, the work we ship.
+  3. `ServicesPreviewSection` — 4 highlighted services (Web Design, Web Development, UI/UX, Performance) in a 2×2 grid with per-service anchor links into `/services`.
+  4. `SelectedWorkSection` — 3 placeholder projects (Northwind Commerce, Lumen Marketing, Harbor Financial) with industry tag, description, services pills, and a calm gradient preview surface (real visuals land in Phase 08).
+  5. `WhyAurwaveSection` — 4 numbered differentiation points: Strategy before execution, Design+Dev together, Performance is a feature, Clear communication.
+  6. `ProcessSection` — 5-step process (Discover, Define, Design, Develop, Launch) with index numbers and short descriptions.
+  7. `CapabilitiesSection` — Frontend (React, Next.js, TypeScript), Styling (Tailwind CSS), Animation (Motion), Deployment (Vercel) — only technologies Aurwave actually uses.
+  8. `TestimonialSection` — single placeholder social-proof block; real quotes land in Phase 08.
+  9. `FinalCTASection` — "Have a project in mind?" + "Start a Conversation" CTA → `/contact`.
+- **Phase 05 — Sections barrel:** `src/components/sections/index.ts` re-exports every section component plus the contact form for tidy imports from `app/` routes.
 
 ### Changed
 
@@ -56,9 +67,10 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   - `cn` (3) — class merging, falsy filtering, last-wins conflict resolution.
   - `cn` re-export + `variants` helper (10) — defaults, selected variants, additional className conflict resolution, missing defaultVariants, unknown values; includes a regression test that `text-primary-foreground` survives alongside `bg-primary` and `text-body`.
   - `usePrefersReducedMotion` (5) — initial state, sync read on mount, listener change, unsubscribe on unmount, legacy `addListener` fallback.
-- `npm run build` — production build succeeds; 11 routes are static-rendered (103 kB First Load JS shared, contact is the heaviest at 115 kB because it inlines the form).
-- `npm run test:e2e` — 60/60 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips (4 on the wrong viewport). Coverage:
+- `npm run build` — production build succeeds; 11 routes are static-rendered (103 kB First Load JS shared; `/` is 152 kB because it inlines `motion` for the `Reveal` components; `/contact` is 115 kB because it inlines the form).
+- `npm run test:e2e` — 88/88 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips. Coverage:
   - Home: title, wordmark, primary nav, mobile nav, primary CTA → /contact.
+  - Homepage sections (Phase 05): every section is present in the IA order, the hero shows the eyebrow + headline + both CTAs, services preview lists 4 services, selected work lists 3 projects, process lists all 5 phases, capabilities list every technology, final CTA navigates to /contact.
   - Navigation: every route (`/`, `/services`, `/work`, `/about`, `/contact`, `/privacy`, `/terms`) loads with the expected title and H1; `/this-route-does-not-exist` returns 404 and renders the not-found page; footer renders Sitemap, Services, and Contact columns.
   - Mobile menu: hamburger visible, opens menu, aria-expanded flips, ESC closes and returns focus to the toggle, tapping a link navigates and closes the menu.
 

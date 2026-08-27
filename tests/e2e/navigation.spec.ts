@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 const routes = [
-  { path: "/", title: /Aurwave/i, h1: /Aurwave/i },
+  { path: "/", title: /Aurwave/i, h1: /Considered digital experiences/i },
   { path: "/services", title: /Services/i, h1: /What we build/i },
   { path: "/work", title: /Work/i, h1: /Recent projects/i },
   { path: "/about", title: /About/i, h1: /senior studio/i },
