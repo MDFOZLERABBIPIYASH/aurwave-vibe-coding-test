@@ -110,8 +110,13 @@ export function useMobileMenu(options: UseMobileMenuOptions = {}): UseMobileMenu
         el.removeAttribute("data-inert-by-menu");
       });
       // Return focus to the toggle button so keyboard users land where
-      // they left off.
-      toggleButton?.focus();
+      // they left off. `requestAnimationFrame` defers the focus call
+      // until the DOM is settled, which matters in some browsers
+      // (e.g. WebKit) when an animated element is unmounting.
+      const btn = toggleButton;
+      if (btn) {
+        requestAnimationFrame(() => btn.focus());
+      }
     };
   }, [open, panel, toggleButton]);
 

@@ -3,7 +3,7 @@ import { Section } from "@/components/ui/Section";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, TextReveal } from "@/components/motion";
 
 /**
  * Capabilities — the technology stack, grouped by role.
@@ -48,7 +48,7 @@ export function CapabilitiesSection() {
             </Reveal>
             <Reveal delay={0.08}>
               <Heading variant="h2" className="mt-4 text-balance">
-                A small, deliberate stack.
+                <TextReveal text="A small, deliberate stack." />
               </Heading>
             </Reveal>
             <Reveal delay={0.16}>

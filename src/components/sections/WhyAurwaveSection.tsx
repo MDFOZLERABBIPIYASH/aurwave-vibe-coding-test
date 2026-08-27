@@ -3,7 +3,7 @@ import { Section } from "@/components/ui/Section";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, TextReveal } from "@/components/motion";
 
 /**
  * Why Aurwave — differentiation.
@@ -41,7 +41,7 @@ export function WhyAurwaveSection() {
           </Reveal>
           <Reveal delay={0.08}>
             <Heading variant="h2" className="mt-4 text-balance">
-              The way we work, in four commitments.
+              <TextReveal text="The way we work, in four commitments." />
             </Heading>
           </Reveal>
           <Reveal delay={0.16}>

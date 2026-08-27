@@ -4,7 +4,7 @@ import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Link } from "@/components/ui/Link";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, TextReveal } from "@/components/motion";
 import { ArrowUpRightIcon } from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
 
@@ -57,7 +57,7 @@ export function SelectedWorkSection() {
             </Reveal>
             <Reveal delay={0.08}>
               <Heading variant="h2" className="mt-4 max-w-xl">
-                Recent projects.
+                <TextReveal text="Recent projects." />
               </Heading>
             </Reveal>
           </div>
@@ -76,7 +76,7 @@ export function SelectedWorkSection() {
           {projects.map((project, i) => (
             <li key={project.slug}>
               <Reveal delay={0.06 * i}>
-                <article className="group flex h-full flex-col">
+                <article className="group flex h-full flex-col transition-transform duration-fast ease-out-quart hover:-translate-y-0.5">
                   <Link
                     href={`/work/${project.slug}`}
                     aria-label={`${project.name} — ${project.industry}`}

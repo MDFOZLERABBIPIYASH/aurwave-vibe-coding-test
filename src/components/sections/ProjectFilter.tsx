@@ -95,7 +95,7 @@ export function ProjectFilter({ projects }: { projects: Project[] }) {
       <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {visible.map((project) => (
           <li key={project.slug}>
-            <article className="group flex h-full flex-col">
+            <article className="group flex h-full flex-col transition-transform duration-fast ease-out-quart hover:-translate-y-0.5">
               <Link
                 href={`/work/${project.slug}`}
                 aria-label={`${project.name} — ${project.industry}`}

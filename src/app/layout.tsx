@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { PageTransition } from "@/components/motion/PageTransition";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -57,8 +58,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <Header />
-        <main id="main" className="min-h-[calc(100dvh-4rem)]">
-          {children}
+        <main id="main">
+          <PageTransition>{children}</PageTransition>
         </main>
         <Footer />
       </body>

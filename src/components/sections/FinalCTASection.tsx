@@ -3,7 +3,7 @@ import { Section } from "@/components/ui/Section";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Button } from "@/components/ui/Button";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, TextReveal } from "@/components/motion";
 import { ArrowRightIcon } from "@/components/ui/Icon";
 import { siteConfig } from "@/lib/site";
 
@@ -25,7 +25,7 @@ export function FinalCTASection() {
             variant="display-lg"
             className="text-balance"
           >
-            Have a project in mind?
+            <TextReveal text="Have a project in mind?" />
           </Heading>
         </Reveal>
         <Reveal delay={0.08}>

@@ -76,9 +76,13 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 subtle
-                className="rounded-sm text-small text-foreground/80 hover:text-foreground"
+                className="group rounded-sm text-small text-foreground/80 transition-colors duration-fast ease-out-quart hover:text-foreground"
               >
                 {item.label}
+                <span
+                  aria-hidden
+                  className="ml-0 block h-px w-full origin-left scale-x-0 bg-current transition-transform duration-fast ease-out-quart group-hover:scale-x-100"
+                />
               </Link>
             ))}
           </nav>

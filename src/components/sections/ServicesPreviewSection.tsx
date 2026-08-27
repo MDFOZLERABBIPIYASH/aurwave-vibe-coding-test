@@ -4,7 +4,7 @@ import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Link } from "@/components/ui/Link";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, TextReveal } from "@/components/motion";
 import { ArrowUpRightIcon } from "@/components/ui/Icon";
 import { cn } from "@/lib/cn";
 
@@ -53,7 +53,7 @@ export function ServicesPreviewSection() {
             </Reveal>
             <Reveal delay={0.08}>
               <Heading variant="h2" className="mt-4 max-w-xl">
-                What we do, end to end.
+                <TextReveal text="What we do, end to end." />
               </Heading>
             </Reveal>
           </div>

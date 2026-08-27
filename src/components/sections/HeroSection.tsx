@@ -4,7 +4,7 @@ import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Button } from "@/components/ui/Button";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, TextReveal, MagneticHover } from "@/components/motion";
 import { ArrowRightIcon } from "@/components/ui/Icon";
 import { siteConfig } from "@/lib/site";
 
@@ -14,9 +14,10 @@ import { siteConfig } from "@/lib/site";
  * Content (per docs/04-content-strategy.md):
  *  - Eyebrow: Digital Design and Development Agency
  *  - Headline: clear, confident statement about building modern
- *    digital experiences
+ *    digital experiences (text-revealed per-word for emphasis)
  *  - Supporting text: short explanation of Aurwave's value
- *  - Primary CTA: Start a Project (→ /contact)
+ *  - Primary CTA: Start a Project (→ /contact) wrapped in a subtle
+ *    magnetic-hover so it earns a small amount of extra attention
  *  - Secondary CTA: View Our Work (→ /work)
  *
  * Each layer enters with a small `Reveal` and a staggered delay so the
@@ -36,18 +37,19 @@ export function HeroSection() {
             <Eyebrow>Digital Design &amp; Development Agency</Eyebrow>
           </Reveal>
 
-          <Reveal delay={0.08}>
-            <Heading
-              id="hero-heading"
-              as="h1"
-              variant="display-xl"
-              className="mt-6"
-            >
-              Considered digital experiences, built to perform.
-            </Heading>
-          </Reveal>
+          <Heading
+            id="hero-heading"
+            as="h1"
+            variant="display-xl"
+            className="mt-6"
+          >
+            <TextReveal
+              text="Considered digital experiences, built to perform."
+              delay={0.08}
+            />
+          </Heading>
 
-          <Reveal delay={0.16}>
+          <Reveal delay={0.32}>
             <Text
               variant="body-lg"
               tone="muted"
@@ -59,12 +61,18 @@ export function HeroSection() {
             </Text>
           </Reveal>
 
-          <Reveal delay={0.24}>
+          <Reveal delay={0.4}>
             <div className="mt-10 flex flex-wrap items-center gap-3">
-              <Button href={siteConfig.primaryCta.href} intent="primary" size="lg">
-                {siteConfig.primaryCta.label}
-                <ArrowRightIcon className="ml-1" aria-hidden />
-              </Button>
+              <MagneticHover>
+                <Button
+                  href={siteConfig.primaryCta.href}
+                  intent="primary"
+                  size="lg"
+                >
+                  {siteConfig.primaryCta.label}
+                  <ArrowRightIcon className="ml-1" aria-hidden />
+                </Button>
+              </MagneticHover>
               <Button href="/work" intent="ghost" size="lg">
                 View our work
               </Button>

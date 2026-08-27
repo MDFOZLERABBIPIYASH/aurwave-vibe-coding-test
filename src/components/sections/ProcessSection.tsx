@@ -3,7 +3,7 @@ import { Section } from "@/components/ui/Section";
 import { Heading } from "@/components/ui/Heading";
 import { Text } from "@/components/ui/Text";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { Reveal } from "@/components/ui/Reveal";
+import { Reveal, TextReveal } from "@/components/motion";
 
 /**
  * Process — five steps from kickoff to launch.
@@ -56,7 +56,7 @@ export function ProcessSection() {
           </Reveal>
           <Reveal delay={0.08}>
             <Heading variant="h2" className="mt-4 text-balance">
-              How an engagement runs.
+              <TextReveal text="How an engagement runs." />
             </Heading>
           </Reveal>
           <Reveal delay={0.16}>
