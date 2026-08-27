@@ -57,6 +57,11 @@ const config: Config = {
         "display-xl": ["clamp(2.5rem, 5.5vw, 4.25rem)", { lineHeight: "1.08", letterSpacing: "-0.025em" }],
         "display-lg": ["clamp(2rem, 4.5vw, 3.5rem)", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
         "display-md": ["clamp(1.75rem, 3.5vw, 2.5rem)", { lineHeight: "1.15", letterSpacing: "-0.015em" }],
+        // Hierarchical headings — used by <Heading variant="h1..h4" />
+        h1: ["clamp(2rem, 3.5vw, 2.75rem)", { lineHeight: "1.15", letterSpacing: "-0.02em" }],
+        h2: ["clamp(1.5rem, 2.5vw, 2rem)", { lineHeight: "1.2", letterSpacing: "-0.015em" }],
+        h3: ["1.375rem", { lineHeight: "1.3", letterSpacing: "-0.01em" }],
+        h4: ["1.125rem", { lineHeight: "1.35", letterSpacing: "-0.005em" }],
         // Body / supporting
         "body-lg": ["1.125rem", { lineHeight: "1.65" }],
         body: ["1rem", { lineHeight: "1.65" }],
