@@ -69,6 +69,14 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   - `motion` is already in `experimental.optimizePackageImports` in `next.config.ts` so Next.js tree-shakes the import.
   - `will-change` is used sparingly — reserved for cases where a brief composite-layer is justified. Not added to the page-transition wrapper.
   - Build: home page is 1.22 kB page-specific + 154 kB First Load JS (motion is bundled into the shared chunks). The 6 `/work/[slug]` pages stay SSG.
+- **Phase 08 — Logo system (`public/icons/`):** `aurwave-mark.svg` (icon-only) and `aurwave-logo.svg` (horizontal wordmark lockup). Both use `currentColor` so they render correctly in light and dark themes.
+- **Phase 08 — Logo component (`src/components/ui/Logo.tsx`):** inline-SVG React component with `mark` and `wordmark` variants. Same geometry as the public files; both copies are documented in `public/icons/README.md` to keep them in sync.
+- **Phase 08 — Logo in Header + Footer:** replaced the text wordmark with the `<Logo />` component. The link is still an `<a>` with the same `aria-label`, so existing E2E selectors continue to work.
+- **Phase 08 — Dynamic favicon (`src/app/icon.tsx`):** uses Next.js's `ImageResponse` to render the mark as a 32×32 PNG at build time. Picked up automatically as `<link rel="icon">` — no root layout wiring needed.
+- **Phase 08 — Sitemap (`src/app/sitemap.ts`):** App Router native metadata route. Lists every public route (5 static + 6 `/work/[slug]`) with `lastModified`, `changeFrequency`, and `priority`. Built from `siteConfig.url` + `allProjectSlugs()` so it stays in sync with the project catalog.
+- **Phase 08 — robots.txt (`src/app/robots.ts`):** allows the entire site, disallows `/dev/` and `/api/`, and points at the sitemap.
+- **Phase 08 — Testimonial cleanup:** removed the "Placeholder name, role at a placeholder company" attribution. The eyebrow now reads "From our clients" and the caption is clearly marked as an editorial sample to be replaced with a real, approved quote before launch.
+- **Phase 08 — Asset folder structure:** created `public/images/{projects,services,general}/` and `public/icons/` READMEs documenting the file conventions, optimization targets (AVIF/WebP, ≤ 200 KB, 4:3 for project cards), and license tracking per `docs/10-asset-management.md`. Real images are still pending — the current site uses honest gradient placeholders in code, which is documented in the README.
 
 ### Changed
 
@@ -100,7 +108,7 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   - `usePrefersReducedMotion` (5) — initial state, sync read on mount, listener change, unsubscribe on unmount, legacy `addListener` fallback.
   - `validateContact` (6) — accepts valid payload, flags missing required fields, rejects invalid email, enforces 10-character minimum message, treats whitespace as empty, doesn't flag optional fields when missing.
 - `npm run build` — production build succeeds. 11 base routes are static-rendered; the 6 project pages at `/work/[slug]` are pre-rendered as SSG via `generateStaticParams`. First Load JS: shared 103 kB; `/` and `/work` 152 kB (inlines `motion`); `/services` and `/work/[slug]` 150 kB.
-- `npm run test:e2e` — 140/140 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips. Coverage:
+- `npm run test:e2e` — 156/156 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips. Coverage:
   - Home: title, wordmark, primary nav, mobile nav, primary CTA → /contact.
   - Homepage sections (Phase 05): every section is present in the IA order, the hero shows the eyebrow + headline + both CTAs, services preview lists 4 services, selected work lists 3 projects, process lists all 5 phases, capabilities list every technology, final CTA navigates to /contact.
   - Navigation: every route loads with the expected title and H1; unknown path returns 404; footer renders Sitemap, Services, Contact columns.
@@ -108,6 +116,8 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   - Work (Phase 06): all 6 projects render initially; clicking a card navigates to `/work/[slug]`; the Web filter narrows the grid (asserted both via URL query and visible count); the detail page renders problem/approach/results blocks and a "Continue reading" link; unknown slugs return 404.
   - Contact form (Phase 06): empty submit surfaces summary + per-field errors (verified via `[id$="-name-error"]` selectors); invalid email surfaces a clear error; valid submit posts to `/api/contact` (intercepted) and shows the success panel; 5xx from the API shows the error alert.
   - Motion (Phase 07): the hero headline settles to opacity 1 after the text-reveal animation; with `prefers-reduced-motion: reduce` the heading renders at its final opacity immediately, and section H2s do the same; the `<main>` element always has at least one child (the `PageTransition` wrapper).
+  - SEO surface (Phase 08): `/icon` returns a 200 with an `image/*` content type; `/robots.txt` includes the `User-Agent`, `Disallow: /dev/`, and `Sitemap` directives; `/sitemap.xml` lists every static route and every project slug from the catalog.
+  - Logo (Phase 08): the home page renders the brand wordmark as an accessible image in the header.
 
 ### Security
 

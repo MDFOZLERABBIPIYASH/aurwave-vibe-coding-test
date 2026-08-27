@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" fill="none" role="img" aria-label="Aurwave">
+  <title>Aurwave</title>
+  <!--
+    Aurwave wordmark: mark + text lockup.
+    Mark sits at the left, baseline-aligned with the wordmark.
+  -->
+  <g transform="translate(0, 4)">
+    <path
+      d="M20 2 L33 32 L28.6 32 L25.6 25.5 L14.4 25.5 L11.4 32 L7 32 Z M16.4 21.5 L23.6 21.5 L20 13.1 Z"
+      fill="currentColor"
+    />
+    <path
+      d="M2 36 Q 7.5 32.5, 13 36 T 23 36 T 33 36"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      fill="none"
+    />
+  </g>
+  <text
+    x="48"
+    y="29"
+    font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+    font-size="22"
+    font-weight="600"
+    letter-spacing="-0.02em"
+    fill="currentColor"
+  >Aurwave</text>
+</svg>

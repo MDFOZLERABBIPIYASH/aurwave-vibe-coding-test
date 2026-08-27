@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Aurwave mark">
+  <title>Aurwave mark</title>
+  <!--
+    Aurwave mark: a stylized A with a wave underneath.
+    Uses currentColor so it inherits the surrounding text color
+    in light and dark themes.
+  -->
+  <path
+    d="M16 5 L26 25 L22.7 25 L20.5 20 L11.5 20 L9.3 25 L6 25 Z M13 17 L19 17 L16 10.4 Z"
+    fill="currentColor"
+  />
+  <path
+    d="M4 28 Q 8 25.5, 12 28 T 20 28 T 28 28"
+    stroke="currentColor"
+    stroke-width="1.6"
+    stroke-linecap="round"
+    fill="none"
+  />
+</svg>

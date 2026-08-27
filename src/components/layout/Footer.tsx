@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { Link } from "@/components/ui/Link";
 import { Text } from "@/components/ui/Text";
+import { Logo } from "@/components/ui/Logo";
 import { primaryNav, siteConfig } from "@/lib/site";
 
 /**
@@ -37,9 +38,10 @@ export function Footer() {
           <div className="lg:col-span-5">
             <Link
               href="/"
-              className="font-display text-body font-semibold tracking-tight text-foreground no-underline hover:no-underline"
+              className="inline-flex items-center text-foreground no-underline hover:no-underline"
+              aria-label={`${siteConfig.name} home`}
             >
-              {siteConfig.name}
+              <Logo variant="wordmark" width={120} title={siteConfig.name} />
             </Link>
             <Text tone="muted" className="mt-4 max-w-md">
               {siteConfig.shortDescription}

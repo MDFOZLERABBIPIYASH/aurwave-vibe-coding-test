@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Link } from "@/components/ui/Link";
+import { Logo } from "@/components/ui/Logo";
 import { MenuIcon, CloseIcon, ArrowUpRightIcon } from "@/components/ui/Icon";
 import { primaryNav, siteConfig } from "@/lib/site";
 import { cn } from "@/lib/cn";
@@ -60,10 +61,10 @@ export function Header() {
         <div className="flex h-16 items-center justify-between gap-4 lg:h-20">
           <Link
             href="/"
-            className="font-display text-body font-semibold tracking-tight text-foreground no-underline hover:no-underline"
+            className="inline-flex items-center text-foreground no-underline hover:no-underline"
             aria-label={`${siteConfig.name} home`}
           >
-            {siteConfig.name}
+            <Logo variant="wordmark" width={120} title={`${siteConfig.name} home`} />
           </Link>
 
           {/* Desktop nav */}

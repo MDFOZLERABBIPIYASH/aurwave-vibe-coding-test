@@ -27,3 +27,6 @@ export type { RevealProps } from "./Reveal";
 
 export { MenuIcon, CloseIcon, ArrowRightIcon, ArrowUpRightIcon } from "./Icon";
 export type { IconProps } from "./Icon";
+
+export { Logo } from "./Logo";
+export type { LogoProps } from "./Logo";
