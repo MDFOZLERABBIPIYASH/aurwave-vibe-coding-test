@@ -3,6 +3,7 @@
 import { useId, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import { siteConfig } from "@/lib/site";
 import {
   validateContact,
   type ContactError,
@@ -126,10 +127,10 @@ export function ContactForm() {
           We&apos;ll get back to you within two business days. If your
           inquiry is time-sensitive, email us directly at{" "}
           <a
-            href="mailto:hello@aurwave.com"
+            href={`mailto:${siteConfig.email}`}
             className="text-foreground underline decoration-muted-foreground/40 underline-offset-4 hover:decoration-foreground"
           >
-            hello@aurwave.com
+            {siteConfig.email}
           </a>
           .
         </p>
