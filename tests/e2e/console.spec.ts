@@ -28,6 +28,11 @@ const allowlist = [
   // should have a real reason.
   /hydration/i,
   /devtools/i,
+  // Vercel Analytics + Speed Insights inject `/\_vercel/insights/...`
+  // scripts at runtime. On `npm start` (and any non-Vercel env)
+  // those paths 404, which the browser surfaces as console
+  // errors. The scripts are no-ops when 404'd, so allow them.
+  /_vercel\/(insights|speed-insights)\//i,
 ];
 
 for (const route of routes) {

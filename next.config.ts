@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import withBundleAnalyzer from "@next/bundle-analyzer";
+import { withSentryConfig } from "@sentry/nextjs";
 
 const baseConfig: NextConfig = {
   reactStrictMode: true,
@@ -23,4 +24,23 @@ const withAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 });
 
-export default withAnalyzer(baseConfig);
+/**
+ * Sentry wrapper.
+ *
+ * `withSentryConfig` adds:
+ *  - source-map upload (when `SENTRY_AUTH_TOKEN` is set)
+ *  - automatic instrumentation for Next.js data-fetching methods
+ *  - client-side Sentry init via the Sentry Next.js SDK
+ *
+ * If `SENTRY_DSN` is not set, the SDK still loads but reports
+ * are no-ops. Source-map upload only happens when
+ * `SENTRY_AUTH_TOKEN` is set, so the build is unaffected in
+ * environments without Sentry.
+ */
+const sentryOptions = {
+  // Suppress the Sentry build log when the DSN is not configured.
+  // This is the supported opt-out per the @sentry/nextjs docs.
+  ...(process.env.SENTRY_DSN ? {} : { disableLogger: true }),
+};
+
+export default withAnalyzer(withSentryConfig(baseConfig, sentryOptions));

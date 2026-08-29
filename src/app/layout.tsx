@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "@/styles/globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -66,6 +68,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <PageTransition>{children}</PageTransition>
         </main>
         <Footer />
+        {/*
+          Vercel Analytics + Speed Insights.
+          Both auto-detect the deployment environment and ship zero
+          runtime cost when not on Vercel. No env vars required —
+          the project ID is derived from the deploy context.
+        */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
