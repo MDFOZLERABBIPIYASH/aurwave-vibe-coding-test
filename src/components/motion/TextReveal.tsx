@@ -89,6 +89,11 @@ export function TextReveal({
       whileInView="show"
       viewport={{ once, margin: "-10% 0px -10% 0px" }}
       variants={containerVariants}
+      // `role="text"` makes `aria-label` valid on a generic <span>;
+      // it also tells assistive tech to read the label as a single
+      // string instead of walking the individual word children
+      // (which are aria-hidden so they animate independently).
+      role="text"
       aria-label={text}
     >
       {words.map((word, i) =>

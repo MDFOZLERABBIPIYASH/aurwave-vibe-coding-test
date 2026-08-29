@@ -85,6 +85,15 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   Six routes × seven viewports × four browser projects = 168 cases, all green on the first run. No layout regressions found.
 - **Phase 09 — Interactive per-viewport tests (`tests/e2e/responsive-interactions.spec.ts`):** mobile menu open/close on 360 and 414 with 40px+ touch targets; project grid lays out as a 2-column grid at 768 with all filter chips tappable; contact form fields are full-width and the submit button meets the 44px WCAG 2.5.5 minimum target size on small viewports.
 - **Phase 09 — Layout audit:** reviewed the breakpoint matrix in `tailwind.config.ts` (sm 640, md 768, lg 1024, xl 1280, 2xl 1536) and confirmed the site uses every breakpoint intentionally — no dead classes, no fixed widths that ignore the grid, no fixed font sizes that resist the responsive `clamp()` scale. The placeholder gradients and Tailwind `aspect-[4/3]` cards collapse cleanly down to 360.
+- **Phase 10 — Accessibility tooling (`@axe-core/playwright`):** new dev dependency. `tests/e2e/helpers/axe.ts` runs `AxeBuilder` with the WCAG 2.0 / 2.1 / 2.2 Level A + AA tag set. `tests/e2e/a11y.spec.ts` runs the audit on every public route and fails on any `critical` or `serious` violation; `moderate` / `minor` violations are logged for follow-up.
+- **Phase 10 — A11y fixes (from the first axe run):**
+  - `aria-prohibited-attr`: `TextReveal` now uses `role="text"` on the outer span so the `aria-label` is valid. Inner word spans remain `aria-hidden` so the per-word animation doesn't double-announce.
+  - `color-contrast`: primary token darkened from `oklch(0.55 0.2 260)` to `oklch(0.4 0.16 260)` so the primary button clears 4.5:1 against white text. Focus ring token darkened to match.
+  - `definition-list` / `dlitem`: `Reveal` now accepts an `as` prop; the `<dl>` in `CapabilitiesSection` and the project card heading in `ProjectFilter` use `as="dt"` / `as="dd"` / `as="h2"` so the semantic tags are direct children of the `<dl>` / `<h1>` instead of being wrapped in a `<div>`.
+  - `skip-to-content` flow: the root `<main>` element is now `tabIndex={-1}` so clicking the skip link moves focus to it.
+  - Heading hierarchy: project cards on `/work` are now `<h2>` (a subheading of the work page), not `<h3>`. The previous h1 → h3 jump is fixed.
+- **Phase 10 — Performance tooling (`@next/bundle-analyzer`):** new dev dependency. Wired into `next.config.ts` behind `ANALYZE=true` so `npm run build` stays fast by default and `ANALYZE=true npm run build` writes `.next/analyze/{client,server}.html` for review.
+- **Phase 10 — Performance audit:** bundle is **103 kB First Load shared JS** with per-route pages weighing 0.1–2.8 kB of route-specific code. The 6 `/work/[slug]` pages stay SSG. `next/font/google` is already self-hosting Inter (see `src/app/layout.tsx`); `next/image` is configured to serve AVIF/WebP (`next.config.ts`) and is ready to be used as project images land. `optimizePackageImports: ["motion"]` ensures the motion library is tree-shaken. No unused dependencies found.
 
 ### Changed
 
@@ -116,7 +125,7 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   - `usePrefersReducedMotion` (5) — initial state, sync read on mount, listener change, unsubscribe on unmount, legacy `addListener` fallback.
   - `validateContact` (6) — accepts valid payload, flags missing required fields, rejects invalid email, enforces 10-character minimum message, treats whitespace as empty, doesn't flag optional fields when missing.
 - `npm run build` — production build succeeds. 11 base routes are static-rendered; the 6 project pages at `/work/[slug]` are pre-rendered as SSG via `generateStaticParams`. First Load JS: shared 103 kB; `/` and `/work` 152 kB (inlines `motion`); `/services` and `/work/[slug]` 150 kB.
-- `npm run test:e2e` — 348/348 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips. Coverage:
+- `npm run test:e2e` — 400/400 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips. Coverage:
   - Home: title, wordmark, primary nav, mobile nav, primary CTA → /contact.
   - Homepage sections (Phase 05): every section is present in the IA order, the hero shows the eyebrow + headline + both CTAs, services preview lists 4 services, selected work lists 3 projects, process lists all 5 phases, capabilities list every technology, final CTA navigates to /contact.
   - Navigation: every route loads with the expected title and H1; unknown path returns 404; footer renders Sitemap, Services, Contact columns.
@@ -127,6 +136,7 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   - SEO surface (Phase 08): `/icon` returns a 200 with an `image/*` content type; `/robots.txt` includes the `User-Agent`, `Disallow: /dev/`, and `Sitemap` directives; `/sitemap.xml` lists every static route and every project slug from the catalog.
   - Logo (Phase 08): the home page renders the brand wordmark as an accessible image in the header.
   - Responsive (Phase 09): every public route lays out cleanly (no horizontal overflow, H1 visible, primary nav reachable) at the seven target viewports (360, 414, 768, 1024, 1280, 1536, 1920 px) across all 4 browser projects. Mobile menu, project grid, and contact form all meet the WCAG 2.5.5 44px touch-target minimum on small viewports.
+  - A11y (Phase 10): axe-core audit on every public route reports zero critical or serious WCAG 2.2 AA violations across all 4 browser projects. Every page has exactly one `<h1>` and a valid heading hierarchy (no level skips). The skip-to-content link is reachable on the first Tab and moves focus to `<main>` when activated.
 
 ### Security
 

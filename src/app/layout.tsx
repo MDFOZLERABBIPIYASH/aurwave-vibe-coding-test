@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <Header />
-        <main id="main">
+        <main id="main" tabIndex={-1} className="focus:outline-none">
           <PageTransition>{children}</PageTransition>
         </main>
         <Footer />

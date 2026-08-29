@@ -120,7 +120,7 @@ export function ProjectFilter({ projects }: { projects: Project[] }) {
                 <p className="text-eyebrow uppercase tracking-[0.18em] text-muted-foreground">
                   {labelFor(project.category)} · {project.year}
                 </p>
-                <Heading variant="h3" as="h3" className="mt-2 text-balance">
+                <Heading variant="h3" as="h2" className="mt-2 text-balance">
                   <Link
                     href={`/work/${project.slug}`}
                     className="text-foreground no-underline hover:no-underline"

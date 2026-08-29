@@ -12,8 +12,9 @@
  */
 
 :root {
-  /* Brand-neutral placeholder */
-  --color-primary: oklch(0.55 0.2 260);
+  /* Brand-neutral placeholder. Darkened to clear WCAG 2.2 AA on
+     white text (≥ 4.5:1) when rendered as a primary button. */
+  --color-primary: oklch(0.4 0.16 260);
   --color-primary-foreground: oklch(0.99 0 0);
 
   --color-neutral-50: oklch(0.985 0 0);
@@ -38,7 +39,7 @@
   --color-muted-foreground: oklch(0.45 0 0);
 
   --color-border: oklch(0.92 0 0);
-  --color-ring: oklch(0.55 0.2 260 / 0.5);
+  --color-ring: oklch(0.4 0.16 260 / 0.6);
 
   /* Typography */
   --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;

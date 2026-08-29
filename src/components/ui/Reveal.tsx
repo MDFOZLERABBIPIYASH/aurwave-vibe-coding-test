@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion, type Variants, type MotionProps } from "motion/react";
-import type { ReactNode } from "react";
+import type { ReactNode, ElementType } from "react";
 import { cn } from "@/lib/cn";
 
 /**
@@ -13,9 +13,8 @@ import { cn } from "@/lib/cn";
  *
  * Use `delay` to stagger siblings or `y` to control travel distance.
  *
- * The component intentionally renders a single `<div>` to keep typing tight
- * and avoid React's polymorphic-prop friction. Wrap a section/list element
- * inside if you need a specific landmark.
+ * `as` lets callers pick a different host element (e.g. `dt`, `dd`, `li`)
+ * when the parent semantic requires the reveal to be a direct child.
  */
 export interface RevealProps extends Omit<MotionProps, "initial" | "animate" | "whileInView" | "variants"> {
   children: ReactNode;
@@ -28,6 +27,8 @@ export interface RevealProps extends Omit<MotionProps, "initial" | "animate" | "
   /** Once-only playback (default true). */
   once?: boolean;
   className?: string;
+  /** Render as a different element. Default "div". */
+  as?: ElementType;
 }
 
 export function Reveal({
@@ -37,6 +38,7 @@ export function Reveal({
   duration = 0.5,
   once = true,
   className,
+  as = "div",
   ...rest
 }: RevealProps) {
   const reduced = useReducedMotion();
@@ -59,8 +61,10 @@ export function Reveal({
         },
       };
 
+  const MotionTag = motion[as as keyof typeof motion] as typeof motion.div;
+
   return (
-    <motion.div
+    <MotionTag
       className={cn(className)}
       initial="hidden"
       whileInView="show"
@@ -69,6 +73,6 @@ export function Reveal({
       {...rest}
     >
       {children}
-    </motion.div>
+    </MotionTag>
   );
 }

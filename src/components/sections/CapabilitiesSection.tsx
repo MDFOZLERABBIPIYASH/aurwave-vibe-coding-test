@@ -62,23 +62,29 @@ export function CapabilitiesSection() {
 
           <dl className="grid gap-8 sm:col-span-8 sm:grid-cols-2">
             {groups.map((group, i) => (
-              <Reveal key={group.label} delay={0.04 * i}>
-                <div>
-                  <dt className="text-eyebrow uppercase tracking-[0.18em] text-muted-foreground">
-                    {group.label}
-                  </dt>
-                  <dd className="mt-3 flex flex-wrap gap-2">
-                    {group.items.map((item) => (
-                      <span
-                        key={item}
-                        className="rounded-full border border-border bg-background px-3 py-1 text-small text-foreground"
-                      >
-                        {item}
-                      </span>
-                    ))}
-                  </dd>
-                </div>
-              </Reveal>
+              <div key={group.label}>
+                <Reveal
+                  as="dt"
+                  delay={0.04 * i}
+                  className="text-eyebrow uppercase tracking-[0.18em] text-muted-foreground"
+                >
+                  {group.label}
+                </Reveal>
+                <Reveal
+                  as="dd"
+                  delay={0.04 * i + 0.05}
+                  className="mt-3 flex flex-wrap gap-2"
+                >
+                  {group.items.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full border border-border bg-background px-3 py-1 text-small text-foreground"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </Reveal>
+              </div>
             ))}
           </dl>
         </div>
