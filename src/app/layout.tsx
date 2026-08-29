@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { siteConfig } from "@/lib/site";
 import { PageTransition } from "@/components/motion/PageTransition";
 
 const inter = Inter({
@@ -12,7 +13,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  // siteConfig.url is already validated (empty-string guarded) in
+  // `src/lib/site.ts`, so this URL parse never throws even when
+  // NEXT_PUBLIC_SITE_URL is unset or blank.
+  metadataBase: new URL(siteConfig.url),
   title: {
     default: "Aurwave — Web Design & Development Agency",
     template: "%s · Aurwave",
