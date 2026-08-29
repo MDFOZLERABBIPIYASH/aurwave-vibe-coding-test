@@ -20,10 +20,13 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
 - Added `tests/unit/site.test.ts` with 7 cases: `NEXT_PUBLIC_SITE_URL` and `CONTACT_EMAIL` each tested against unset, empty-string, whitespace, and real-URL inputs. These guard against the same regression in the future. **31/31 unit tests pass** (was 24).
 
 ### Deployment
-- First Vercel deploy attempted at commit `6d2be48`. The build failed on `/_not-found` with `TypeError: Invalid URL` for the reason above. Fixed in `e136c3a`. Push to `main` triggered a redeploy; subsequent deploys should succeed out of the box.
-- Recommended Vercel project env vars (set in **Project Settings → Environment Variables**):
-  - `NEXT_PUBLIC_SITE_URL` — the deployed `*.vercel.app` URL (or a custom domain). Leave unset for the first deploy; the build will fall back to `http://localhost:3000` so the sitemap is wrong but the site still renders.
-  - `CONTACT_EMAIL` — the inbox that should receive contact-form submissions. `f.r.p.421l@gmail.com` is the project default.
+- **Live:** v1.0.0 is now live at `https://aurwave-vibe-coding-test.vercel.app/`. The first production deploy was triggered by pushing the fix commit (`e136c3a`) to `main`; Vercel's GitHub integration picked it up and built automatically.
+- **First deploy attempt** at commit `6d2be48` failed on `/_not-found` with `TypeError: Invalid URL`. Root cause and fix in `e136c3a` (above). Subsequent deploys succeed.
+- **Project env vars** (set in Vercel project settings — Production + Preview):
+  - `NEXT_PUBLIC_SITE_URL` = `https://aurwave-vibe-coding-test.vercel.app`
+  - `CONTACT_EMAIL` = `f.r.p.421l@gmail.com`
+  - Both values are also the build-time defaults in `src/lib/site.ts` so the site still builds and works without env vars set; only the sitemap and metadata URLs change.
+- **Docs updated:** `README.md` shows the live URL. `docs/13-vercel-deployment.md` is now a real, end-to-end deployment guide covering the GitHub → Vercel flow, env-var setup, custom-domain migration, and rollback procedure.
 
 ---
 
@@ -212,6 +215,7 @@ plan (`plan.md`) is complete and verified:
 - **Phase 12 — Version control and release:** `git user.name` and `git user.email` configured locally and globally as `MDFOZLERABBIPIYASH <f.r.p.421l@gmail.com>`. Default branch is `main`. All 10 commits on `main` use a conventional prefix (`chore:`, `feat(scope):`, `test(scope):`, `ci:`, `docs(scope):`); each is a single logical change with a matching `CHANGELOG.md` entry.
 - **Phase 12 — Release notes:** added a `[1.0.0] — 2026-08-29` section at the top of `CHANGELOG.md` summarizing every shipped phase, the current quality gates, and the known limitations carried into the release. `README.md` now shows a "Status: v1.0.0" line and links to the changelog from the repo root.
 - **Phase 12 — v1.0.0 tag:** annotated tag `v1.0.0` created on the latest `main` commit (`c7b4d5e`) with full release notes, and pushed to `origin`. The tag is the canonical reference for "the first production-ready commit" per `plan.md` Phase 12 task 4. The local commit history was rewritten once (Phase 06 → Phase 07 boundary) to align all author metadata with the project's GitHub identity.
+- **Phase 13 — Vercel deployment:** the repo is connected to Vercel via the GitHub App integration. Production deploys are automatic on every push to `main`; PRs get preview URLs. The first successful deploy is live at `https://aurwave-vibe-coding-test.vercel.app/`. `docs/13-vercel-deployment.md` is now a real, end-to-end deployment guide (was a placeholder before) covering: the GitHub → Vercel flow, env-var setup, the empty-string env-var trap, custom-domain migration, and rollback via the Vercel dashboard. `.env.example` now defaults `NEXT_PUBLIC_SITE_URL` to the production URL.
 
 ### Changed
 
