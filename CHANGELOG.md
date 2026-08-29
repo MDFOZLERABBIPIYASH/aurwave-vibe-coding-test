@@ -94,6 +94,27 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   - Heading hierarchy: project cards on `/work` are now `<h2>` (a subheading of the work page), not `<h3>`. The previous h1 → h3 jump is fixed.
 - **Phase 10 — Performance tooling (`@next/bundle-analyzer`):** new dev dependency. Wired into `next.config.ts` behind `ANALYZE=true` so `npm run build` stays fast by default and `ANALYZE=true npm run build` writes `.next/analyze/{client,server}.html` for review.
 - **Phase 10 — Performance audit:** bundle is **103 kB First Load shared JS** with per-route pages weighing 0.1–2.8 kB of route-specific code. The 6 `/work/[slug]` pages stay SSG. `next/font/google` is already self-hosting Inter (see `src/app/layout.tsx`); `next/image` is configured to serve AVIF/WebP (`next.config.ts`) and is ready to be used as project images land. `optimizePackageImports: ["motion"]` ensures the motion library is tree-shaken. No unused dependencies found.
+- **Phase 11 — CI scripts:** new `npm run validate` (lint + type-check + unit tests, ~3s) and `npm run ci` (validate + build + Playwright E2E) entries in `package.json`. `validate` is the fast local check; `ci` mirrors what the GitHub Actions workflow runs.
+- **Phase 11 — GitHub Actions workflow (`.github/workflows/ci.yml`):** three jobs run sequentially on push and pull request to `main`:
+  1. **validate** — Node 20, `npm ci`, `npm run validate`.
+  2. **build** — gated on `validate`, runs `npm run build` so a broken build blocks the pipeline before E2E even starts.
+  3. **e2e** — gated on `build`, installs Playwright browsers (cached by `package-lock.json` hash), runs the full E2E matrix, and uploads the HTML report on failure. Concurrency group cancels in-flight runs on the same ref so PR pushes don't queue behind themselves.
+- **Phase 11 — Console-error smoke (`tests/e2e/console.spec.ts`):** every public route is loaded with a console listener attached. Page errors and `console.error` calls fail the test (with a small allowlist for hydration / DevTools noise). 24 cases, all green.
+- **Phase 11 — Visual regression smoke (`tests/e2e/visual.spec.ts`):** snapshots the home and `/work` index at desktop (1280×800) and mobile (412×915) viewports. Baselines live at `tests/e2e/visual.spec.ts-snapshots/*.png` and are checked in. `maxDiffPixelRatio: 0.02` tolerates minor font anti-aliasing diffs. Regenerate with `npx playwright test visual.spec.ts -u` after intentional design changes. 16 cases (4 routes × 4 projects), all green on the second run after baselines were created.
+- **Phase 11 — E2E coverage audit:** the suite covers every critical user flow from `docs/11-testing-strategy.md`:
+  - Homepage loads (`home.spec.ts`)
+  - Navigation works desktop + mobile (`navigation.spec.ts`, `mobile-menu.spec.ts`)
+  - Mobile menu keyboard, ESC, focus return (`mobile-menu.spec.ts`)
+  - Contact form happy path + validation + server error (`contact-form.spec.ts`)
+  - Primary CTA navigates to `/contact` (`home.spec.ts`)
+  - No critical console errors on any route (`console.spec.ts`)
+  - Visual regression baseline at desktop + mobile (`visual.spec.ts`)
+  - Responsive layout at 7 viewports (`responsive.spec.ts`, `responsive-interactions.spec.ts`)
+  - Axe-core a11y + heading hierarchy + skip link (`a11y.spec.ts`)
+  - Motion + reduced motion (`motion.spec.ts`)
+  - SEO surface (sitemap, robots, favicon) (`seo.spec.ts`)
+  - Project grid + filter + detail navigation (`work.spec.ts`)
+  - Homepage sections in correct IA order (`home-sections.spec.ts`)
 
 ### Changed
 
@@ -125,7 +146,7 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   - `usePrefersReducedMotion` (5) — initial state, sync read on mount, listener change, unsubscribe on unmount, legacy `addListener` fallback.
   - `validateContact` (6) — accepts valid payload, flags missing required fields, rejects invalid email, enforces 10-character minimum message, treats whitespace as empty, doesn't flag optional fields when missing.
 - `npm run build` — production build succeeds. 11 base routes are static-rendered; the 6 project pages at `/work/[slug]` are pre-rendered as SSG via `generateStaticParams`. First Load JS: shared 103 kB; `/` and `/work` 152 kB (inlines `motion`); `/services` and `/work/[slug]` 150 kB.
-- `npm run test:e2e` — 400/400 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips. Coverage:
+- `npm run test:e2e` — 440/440 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips. Coverage:
   - Home: title, wordmark, primary nav, mobile nav, primary CTA → /contact.
   - Homepage sections (Phase 05): every section is present in the IA order, the hero shows the eyebrow + headline + both CTAs, services preview lists 4 services, selected work lists 3 projects, process lists all 5 phases, capabilities list every technology, final CTA navigates to /contact.
   - Navigation: every route loads with the expected title and H1; unknown path returns 404; footer renders Sitemap, Services, Contact columns.
@@ -137,6 +158,7 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   - Logo (Phase 08): the home page renders the brand wordmark as an accessible image in the header.
   - Responsive (Phase 09): every public route lays out cleanly (no horizontal overflow, H1 visible, primary nav reachable) at the seven target viewports (360, 414, 768, 1024, 1280, 1536, 1920 px) across all 4 browser projects. Mobile menu, project grid, and contact form all meet the WCAG 2.5.5 44px touch-target minimum on small viewports.
   - A11y (Phase 10): axe-core audit on every public route reports zero critical or serious WCAG 2.2 AA violations across all 4 browser projects. Every page has exactly one `<h1>` and a valid heading hierarchy (no level skips). The skip-to-content link is reachable on the first Tab and moves focus to `<main>` when activated.
+  - CI / QA (Phase 11): `npm run validate` (lint + type-check + 24 unit) and `npm run ci` (validate + build + 440 E2E) both pass. GitHub Actions workflow runs the same pipeline on every push/PR. No console errors on any route. Visual regression baselines are checked in for the home and `/work` index at desktop and mobile viewports.
 
 ### Security
 
