@@ -8,6 +8,25 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
 
 ---
 
+## [Unreleased]
+
+### Added
+- `CONTACT_EMAIL` is now wired through the codebase. `src/lib/site.ts` reads `process.env.CONTACT_EMAIL` at build time and exposes it as `siteConfig.email`, which feeds the footer mailto link and the contact-form success panel. `.env.example` documents the variable and sets a sensible local default. The contact-form delivery itself is still a stub (logs to the server console) and will be wired to a real provider in a follow-up.
+
+### Fixed
+- Empty `NEXT_PUBLIC_SITE_URL` no longer breaks the Vercel build. The previous `process.env.X ?? "http://localhost:3000"` guard only handled `null`/`undefined`, so an empty-string env var (which can happen when a Vercel env var is added without a value) caused `new URL("")` to throw during the `/_not-found` config collection step. The fix validates the value (treats empty / whitespace as missing) in `src/lib/site.ts` and uses the same `siteConfig.url` everywhere — `app/layout.tsx` no longer constructs its own URL.
+
+### Testing
+- Added `tests/unit/site.test.ts` with 7 cases: `NEXT_PUBLIC_SITE_URL` and `CONTACT_EMAIL` each tested against unset, empty-string, whitespace, and real-URL inputs. These guard against the same regression in the future. **31/31 unit tests pass** (was 24).
+
+### Deployment
+- First Vercel deploy attempted at commit `6d2be48`. The build failed on `/_not-found` with `TypeError: Invalid URL` for the reason above. Fixed in `e136c3a`. Push to `main` triggered a redeploy; subsequent deploys should succeed out of the box.
+- Recommended Vercel project env vars (set in **Project Settings → Environment Variables**):
+  - `NEXT_PUBLIC_SITE_URL` — the deployed `*.vercel.app` URL (or a custom domain). Leave unset for the first deploy; the build will fall back to `http://localhost:3000` so the sitemap is wrong but the site still renders.
+  - `CONTACT_EMAIL` — the inbox that should receive contact-form submissions. `f.r.p.421l@gmail.com` is the project default.
+
+---
+
 ## [1.0.0] — 2026-08-29
 
 The first production-ready release. Every phase of the implementation
