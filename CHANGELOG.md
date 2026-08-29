@@ -8,6 +8,81 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
 
 ---
 
+## [1.0.0] — 2026-08-29
+
+The first production-ready release. Every phase of the implementation
+plan (`plan.md`) is complete and verified:
+
+- **00 — Project Initialization:** Next.js 15.5.24 + TypeScript + Tailwind +
+  Motion + Vitest + Playwright scaffolded from `docs/07-technical-architecture.md`.
+- **02 — Architecture and Foundation:** strict TS, full design tokens,
+  brand-neutral palette with WCAG 2.2 AA contrast, dark-mode aware.
+- **03 — Design System:** `Button`, `Container`, `Section`, `Heading`,
+  `Text`, `Eyebrow`, `Link`, `Reveal`, `Icon`, and `Logo` primitives,
+  each typed, accessible, and reduced-motion aware. A dev-only
+  showcase at `/dev/components` reviews every primitive in real
+  layout.
+- **04 — Website Structure:** sticky Header with mobile menu (focus
+  trap, ESC, body scroll lock, `inert` scoping), Footer, six public
+  routes, contact form scaffold, 404 / error pages, skip-to-content
+  link.
+- **05 — Homepage:** nine IA-aligned sections (`HeroSection`,
+  `IntroductionSection`, `ServicesPreviewSection`,
+  `SelectedWorkSection`, `WhyAurwaveSection`, `ProcessSection`,
+  `CapabilitiesSection`, `TestimonialSection`, `FinalCTASection`).
+- **06 — Supporting Pages:** `/services` with 6 detail sections,
+  `/work` with filterable grid + 6 SSG detail pages, `/about`
+  with mission / values, real `/api/contact` server route with
+  shared validation, fully-validated contact form.
+- **07 — Animation and Interaction:** centralized motion library
+  (`Stagger`, `TextReveal`, `MagneticHover`, `PageTransition`),
+  text-reveal on hero + key H2s, hover micro-interactions,
+  short route transitions, all `transform`/`opacity` only and
+  reduced-motion aware.
+- **08 — Content and Asset Integration:** SVG logo system
+  (`public/icons/`), `Logo` React component wired into Header +
+  Footer, dynamic favicon via `app/icon.tsx`, native
+  `app/sitemap.ts` and `app/robots.ts`, asset folder READMEs
+  documenting conventions and license tracking.
+- **09 — Responsive Optimization:** data-driven test harness
+  covering 7 viewports × 6 routes × 4 browser projects. No layout
+  regressions found on first run.
+- **10 — Accessibility and Performance:** axe-core audit on every
+  public route. All critical / serious WCAG 2.2 AA violations
+  fixed (primary contrast, `aria-prohibited-attr`, definition
+  lists, heading hierarchy, skip-link). Bundle analyzer wired
+  behind `ANALYZE=true`. 103 kB First Load shared JS.
+- **11 — Testing and Quality Assurance:** GitHub Actions CI runs
+  validate → build → E2E on every push/PR. `npm run validate`
+  and `npm run ci` mirror the workflow. Console-error smoke,
+  visual regression baselines at desktop + mobile, 440 E2E
+  tests across 4 browser projects, 24 unit tests, all green.
+
+**Quality gates**
+
+- `npm run lint` — passes
+- `npm run type-check` — passes (strict mode, `noUncheckedIndexedAccess`)
+- `npm test` — 24/24 unit tests
+- `npm run test:e2e` — 440/440 Playwright tests (4 mobile/desktop conditional skips)
+- `npm run build` — succeeds; 11 base routes static-rendered, 6 `/work/[slug]` SSG, 4 dynamic (favicon, sitemap, robots, contact API)
+- `npm run validate` — `lint` + `type-check` + 24/24 unit (~3s)
+
+**Known limitations carried into v1.0.0**
+
+- Project imagery on the homepage and `/work` index uses
+  gradient placeholders. Real assets are tracked in
+  `public/images/projects/README.md` and `public/images/services/README.md`.
+- The Testimonial section uses a representative editorial
+  sample quote clearly marked as such; a real, approved client
+  quote should land before public launch.
+- The contact form is wired to a stub `/api/contact` route that
+  validates and logs. A real delivery provider (Resend /
+  Formspree / a CRM) is deferred to a follow-up.
+- Privacy and Terms pages are placeholders. Real legal copy
+  should land before public launch.
+
+---
+
 ## [Unreleased]
 
 ### Added

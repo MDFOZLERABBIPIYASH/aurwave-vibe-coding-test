@@ -4,6 +4,8 @@
 
 Aurwave is built as a premium, performance-focused marketing site that communicates clarity, precision, and technical capability.
 
+**Status:** v1.0.0 — see [CHANGELOG.md](CHANGELOG.md) for the full release history. The first production-ready commit is tagged `v1.0.0` on `main`.
+
 ---
 
 ## Tech Stack
