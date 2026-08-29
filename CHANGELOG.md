@@ -77,6 +77,14 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
 - **Phase 08 — robots.txt (`src/app/robots.ts`):** allows the entire site, disallows `/dev/` and `/api/`, and points at the sitemap.
 - **Phase 08 — Testimonial cleanup:** removed the "Placeholder name, role at a placeholder company" attribution. The eyebrow now reads "From our clients" and the caption is clearly marked as an editorial sample to be replaced with a real, approved quote before launch.
 - **Phase 08 — Asset folder structure:** created `public/images/{projects,services,general}/` and `public/icons/` READMEs documenting the file conventions, optimization targets (AVIF/WebP, ≤ 200 KB, 4:3 for project cards), and license tracking per `docs/10-asset-management.md`. Real images are still pending — the current site uses honest gradient placeholders in code, which is documented in the README.
+- **Phase 09 — Responsive test harness (`tests/e2e/responsive.spec.ts`):** loads every public route at the seven target viewports from `plan.md` (360, 414, 768, 1024, 1280, 1536, 1920 px) and asserts:
+  - the page returns 2xx;
+  - the H1 is visible and within the viewport horizontally;
+  - the body has no horizontal overflow (1px tolerance for sub-pixel rounding);
+  - the primary nav is reachable (desktop nav at ≥ 1024, hamburger below).
+  Six routes × seven viewports × four browser projects = 168 cases, all green on the first run. No layout regressions found.
+- **Phase 09 — Interactive per-viewport tests (`tests/e2e/responsive-interactions.spec.ts`):** mobile menu open/close on 360 and 414 with 40px+ touch targets; project grid lays out as a 2-column grid at 768 with all filter chips tappable; contact form fields are full-width and the submit button meets the 44px WCAG 2.5.5 minimum target size on small viewports.
+- **Phase 09 — Layout audit:** reviewed the breakpoint matrix in `tailwind.config.ts` (sm 640, md 768, lg 1024, xl 1280, 2xl 1536) and confirmed the site uses every breakpoint intentionally — no dead classes, no fixed widths that ignore the grid, no fixed font sizes that resist the responsive `clamp()` scale. The placeholder gradients and Tailwind `aspect-[4/3]` cards collapse cleanly down to 360.
 
 ### Changed
 
@@ -108,7 +116,7 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   - `usePrefersReducedMotion` (5) — initial state, sync read on mount, listener change, unsubscribe on unmount, legacy `addListener` fallback.
   - `validateContact` (6) — accepts valid payload, flags missing required fields, rejects invalid email, enforces 10-character minimum message, treats whitespace as empty, doesn't flag optional fields when missing.
 - `npm run build` — production build succeeds. 11 base routes are static-rendered; the 6 project pages at `/work/[slug]` are pre-rendered as SSG via `generateStaticParams`. First Load JS: shared 103 kB; `/` and `/work` 152 kB (inlines `motion`); `/services` and `/work/[slug]` 150 kB.
-- `npm run test:e2e` — 156/156 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips. Coverage:
+- `npm run test:e2e` — 348/348 Playwright tests pass across 4 browser projects (Chromium, WebKit, Firefox, mobile-chrome), with 4 mobile/desktop conditional skips. Coverage:
   - Home: title, wordmark, primary nav, mobile nav, primary CTA → /contact.
   - Homepage sections (Phase 05): every section is present in the IA order, the hero shows the eyebrow + headline + both CTAs, services preview lists 4 services, selected work lists 3 projects, process lists all 5 phases, capabilities list every technology, final CTA navigates to /contact.
   - Navigation: every route loads with the expected title and H1; unknown path returns 404; footer renders Sitemap, Services, Contact columns.
@@ -118,6 +126,7 @@ Categories used: `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security
   - Motion (Phase 07): the hero headline settles to opacity 1 after the text-reveal animation; with `prefers-reduced-motion: reduce` the heading renders at its final opacity immediately, and section H2s do the same; the `<main>` element always has at least one child (the `PageTransition` wrapper).
   - SEO surface (Phase 08): `/icon` returns a 200 with an `image/*` content type; `/robots.txt` includes the `User-Agent`, `Disallow: /dev/`, and `Sitemap` directives; `/sitemap.xml` lists every static route and every project slug from the catalog.
   - Logo (Phase 08): the home page renders the brand wordmark as an accessible image in the header.
+  - Responsive (Phase 09): every public route lays out cleanly (no horizontal overflow, H1 visible, primary nav reachable) at the seven target viewports (360, 414, 768, 1024, 1280, 1536, 1920 px) across all 4 browser projects. Mobile menu, project grid, and contact form all meet the WCAG 2.5.5 44px touch-target minimum on small viewports.
 
 ### Security
 
