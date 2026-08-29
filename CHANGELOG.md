@@ -190,6 +190,9 @@ plan (`plan.md`) is complete and verified:
   - SEO surface (sitemap, robots, favicon) (`seo.spec.ts`)
   - Project grid + filter + detail navigation (`work.spec.ts`)
   - Homepage sections in correct IA order (`home-sections.spec.ts`)
+- **Phase 12 — Version control and release:** `git user.name` and `git user.email` configured locally and globally as `MDFOZLERABBIPIYASH <f.r.p.421l@gmail.com>`. Default branch is `main`. All 10 commits on `main` use a conventional prefix (`chore:`, `feat(scope):`, `test(scope):`, `ci:`, `docs(scope):`); each is a single logical change with a matching `CHANGELOG.md` entry.
+- **Phase 12 — Release notes:** added a `[1.0.0] — 2026-08-29` section at the top of `CHANGELOG.md` summarizing every shipped phase, the current quality gates, and the known limitations carried into the release. `README.md` now shows a "Status: v1.0.0" line and links to the changelog from the repo root.
+- **Phase 12 — v1.0.0 tag:** annotated tag `v1.0.0` created on the latest `main` commit (`c7b4d5e`) with full release notes, and pushed to `origin`. The tag is the canonical reference for "the first production-ready commit" per `plan.md` Phase 12 task 4. The local commit history was rewritten once (Phase 06 → Phase 07 boundary) to align all author metadata with the project's GitHub identity.
 
 ### Changed
 
@@ -234,6 +237,7 @@ plan (`plan.md`) is complete and verified:
   - Responsive (Phase 09): every public route lays out cleanly (no horizontal overflow, H1 visible, primary nav reachable) at the seven target viewports (360, 414, 768, 1024, 1280, 1536, 1920 px) across all 4 browser projects. Mobile menu, project grid, and contact form all meet the WCAG 2.5.5 44px touch-target minimum on small viewports.
   - A11y (Phase 10): axe-core audit on every public route reports zero critical or serious WCAG 2.2 AA violations across all 4 browser projects. Every page has exactly one `<h1>` and a valid heading hierarchy (no level skips). The skip-to-content link is reachable on the first Tab and moves focus to `<main>` when activated.
   - CI / QA (Phase 11): `npm run validate` (lint + type-check + 24 unit) and `npm run ci` (validate + build + 440 E2E) both pass. GitHub Actions workflow runs the same pipeline on every push/PR. No console errors on any route. Visual regression baselines are checked in for the home and `/work` index at desktop and mobile viewports.
+  - Release (Phase 12): v1.0.0 is tagged on `main` and live on `origin`. The release notes are at the top of `CHANGELOG.md`.
 
 ### Security
 
