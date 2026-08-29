@@ -4,9 +4,11 @@
 
 Aurwave is built as a premium, performance-focused marketing site that communicates clarity, precision, and technical capability.
 
-**Status:** v1.0.0 — see [CHANGELOG.md](CHANGELOG.md) for the full release history. The first production-ready commit is tagged `v1.0.0` on `main`.
+**Status:** v1.0.1 — see [CHANGELOG.md](CHANGELOG.md) for the full release history.
 
-**Live:** [https://aurwave-vibe-coding-test.vercel.app/](https://aurwave-vibe-coding-test.vercel.app/)
+- `v1.0.0` — first production-ready commit (the original release; never deployed due to a build bug)
+- `v1.0.1` — first deployable build (live on Vercel)
+- Live: [https://aurwave-vibe-coding-test.vercel.app/](https://aurwave-vibe-coding-test.vercel.app/)
 
 ---
 
