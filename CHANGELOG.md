@@ -230,6 +230,9 @@ plan (`plan.md`) is complete and verified:
 - **Sentry — added `onRequestError` hook to `src/instrumentation.ts`:** the Next.js 15+ way to capture React Server Component errors. Sentry was warning that this hook was missing.
 - **Sentry — added `src/app/global-error.tsx`:** the App Router global error boundary. Catches errors that escape the per-route `error.tsx` (typically root-layout failures). Sentry's `withSentryConfig` automatically wires it for error reporting.
 - **CI fix — `tests/e2e/console.spec.ts`:** the `no console errors` test was failing in CI on every page because Vercel Analytics + Speed Insights inject runtime scripts that 404 outside Vercel. The browser's "Failed to load resource: 404" message is generic — the URL isn't in the text — so the previous allowlist regex never matched. New logic tracks 404 responses via `page.on('response')` and only allows the generic 404 console error when every observed 404 in the test is a known Vercel runtime endpoint (`/_vercel/insights/*` or `/_vercel/speed-insights/*`). Real 404s (missing images, etc.) still fail the test.
+- **Phase 15 — Maintenance doc refresh:** updated `docs/15-maintenance-and-monitoring.md` test counts to match the current state (33 unit, 440 E2E, ~1.5s validate).
+- **Phase 15 — Maintenance baseline snapshot:** added `docs/maintenance-baseline.md` capturing the first monthly baseline: bundle sizes per route, dependency health (`npm outdated` summary, all major-version bumps are intentional), unused-dep audit (removed `npm-run-all2`; `autoprefixer`/`postcss`/`prettier-plugin-tailwindcss` are false positives from config-file references), live site status, known follow-ups. Future audits diff against this file.
+- **Phase 15 — Unused dep removed (`npm-run-all2`):** installed during a debugging session, never used. Removed in the maintenance audit.
 
 ### Changed
 

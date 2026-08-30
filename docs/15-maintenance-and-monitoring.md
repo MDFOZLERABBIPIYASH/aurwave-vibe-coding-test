@@ -34,8 +34,8 @@ Claude (and any future maintainer) should periodically review:
   15 → 16).
 - **Build status** — `npm run build` should always succeed on
   `main`. If it doesn't, the site can't deploy.
-- **Test status** — `npm run validate` (lint + type-check + 31 unit
-  tests, ~1.2s) and `npm run test:e2e` (422 E2E across 4 browser
+- **Test status** — `npm run validate` (lint + type-check + 33 unit
+  tests, ~1.5s) and `npm run test:e2e` (440 E2E across 4 browser
   projects, ~3.6 min) on every change. CI on `main` is the
   upstream gate.
 - **Broken links** — audit internal `/...` links and external
