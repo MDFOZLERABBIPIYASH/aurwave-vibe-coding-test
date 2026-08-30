@@ -39,8 +39,11 @@ const withAnalyzer = withBundleAnalyzer({
  */
 const sentryOptions = {
   // Suppress the Sentry build log when the DSN is not configured.
-  // This is the supported opt-out per the @sentry/nextjs docs.
-  ...(process.env.SENTRY_DSN ? {} : { disableLogger: true }),
+  // `disableLogger` was renamed to `webpack.treeshake.removeDebugLogging`
+  // in @sentry/nextjs 10.x.
+  ...(process.env.SENTRY_DSN
+    ? {}
+    : { webpack: { treeshake: { removeDebugLogging: true } } }),
 };
 
 export default withAnalyzer(withSentryConfig(baseConfig, sentryOptions));

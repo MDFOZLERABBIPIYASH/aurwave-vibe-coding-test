@@ -79,6 +79,14 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
+      - name: Build (production)
+        # Each job runs in a fresh runner, so the `build` job's
+        # `.next` directory is not available here. Re-build locally
+        # so `next start` (used by the Playwright webServer) can
+        # serve the production bundle. This is slower than artifact
+        # sharing but more reliable across cache invalidations.
+        run: npm run build
+
       - name: Cache Playwright browsers
         id: playwright-cache
         uses: actions/cache@v4
