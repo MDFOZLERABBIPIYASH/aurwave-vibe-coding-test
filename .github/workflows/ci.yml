@@ -101,7 +101,10 @@ jobs:
       - name: Run E2E tests
         # E2E takes ~3-4 min locally with the full 4-project matrix.
         # Bump the job timeout to give it room on slow runners.
-        run: npm run test:e2e
+        # `--reporter=line,json` sends a compact line-based summary
+        # to stdout so failures show up in the GitHub UI log without
+        # needing to download the Playwright HTML report.
+        run: npx playwright test --reporter=line,json
         timeout-minutes: 15
 
       - name: Print failed test summary
