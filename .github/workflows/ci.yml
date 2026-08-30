@@ -91,7 +91,26 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run E2E tests
+        # E2E takes ~3-4 min locally with the full 4-project matrix.
+        # Bump the job timeout to give it room on slow runners.
         run: npm run test:e2e
+        timeout-minutes: 15
+
+      - name: Print failed test summary
+        if: failure()
+        # Dump the first 30 failing tests as JSON Lines so they show
+        # up in the GitHub UI log without needing to download the
+        # full Playwright report. Playwright writes a per-test
+        # results file to test-results/ on failure.
+        run: |
+          if [ -d test-results ]; then
+            echo "Failing tests:"
+            find test-results -name "*.json" 2>/dev/null | head -30 | while read f; do
+              echo "--- $f ---"
+              cat "$f" | head -c 2000
+              echo
+            done
+          fi
 
       - name: Upload Playwright report on failure
         if: failure()
