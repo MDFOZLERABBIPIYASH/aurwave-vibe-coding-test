@@ -221,6 +221,7 @@ plan (`plan.md`) is complete and verified:
 - **Phase 14 — Sentry (`@sentry/nextjs`):** added `src/instrumentation.ts` for server-side init and wrapped `next.config.ts` with `withSentryConfig` for source-map upload + client-side init. The SDK loads only when `SENTRY_DSN` is set in the Vercel project settings, so local / preview builds stay clean. To enable: create a Sentry project, copy the DSN, set `SENTRY_DSN` in Vercel env vars, redeploy.
 - **Phase 14 — Test fix (`tests/e2e/console.spec.ts`):** added `/_vercel\/(insights|speed-insights)\//` to the console-error allowlist. The Vercel Analytics scripts inject runtime paths that 404 outside Vercel, which the browser surfaces as console errors — the scripts are no-ops when 404'd, so the allowlist is safe.
 - **Phase 14 — Test fix (`package.json` devDeps):** reinstalled `@testing-library/dom`. The Sentry/Analytics install dropped it as a transitive dependency; component tests need it as a peer of `@testing-library/react`.
+- **Phase 14 — Monitoring doc (`docs/15-maintenance-and-monitoring.md`):** rewritten to reflect what's actually wired in. The new "Live monitoring" section names the three tools (Vercel Analytics, Vercel Speed Insights, Sentry) and links to where their data shows up. The cadence / runbook / error-management sections were updated to reference the actual code paths (`src/app/layout.tsx`, `src/instrumentation.ts`, the Vercel + Sentry dashboards) rather than abstract process language.
 
 ### Changed
 
