@@ -229,6 +229,7 @@ plan (`plan.md`) is complete and verified:
 - **Sentry — replaced deprecated `disableLogger` with `webpack.treeshake.removeDebugLogging`:** the previous option was deprecated in `@sentry/nextjs` 10.x. Now uses the supported tree-shake-based silent logger.
 - **Sentry — added `onRequestError` hook to `src/instrumentation.ts`:** the Next.js 15+ way to capture React Server Component errors. Sentry was warning that this hook was missing.
 - **Sentry — added `src/app/global-error.tsx`:** the App Router global error boundary. Catches errors that escape the per-route `error.tsx` (typically root-layout failures). Sentry's `withSentryConfig` automatically wires it for error reporting.
+- **CI fix — `tests/e2e/console.spec.ts`:** the `no console errors` test was failing in CI on every page because Vercel Analytics + Speed Insights inject runtime scripts that 404 outside Vercel. The browser's "Failed to load resource: 404" message is generic — the URL isn't in the text — so the previous allowlist regex never matched. New logic tracks 404 responses via `page.on('response')` and only allows the generic 404 console error when every observed 404 in the test is a known Vercel runtime endpoint (`/_vercel/insights/*` or `/_vercel/speed-insights/*`). Real 404s (missing images, etc.) still fail the test.
 
 ### Changed
 
