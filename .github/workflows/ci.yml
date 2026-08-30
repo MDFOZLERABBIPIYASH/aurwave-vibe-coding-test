@@ -28,7 +28,18 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          set -e
+          echo "Node: $(node -v)"
+          echo "npm:  $(npm -v)"
+          echo "LockfileVersion: $(node -p "require('./package-lock.json').lockfileVersion")"
+          echo "Lockfile size:   $(wc -l < package-lock.json) lines"
+          # `npm ci` is strict. The Sentry / Vercel Analytics / Speed
+          # Insights install requires --legacy-peer-deps because of
+          # a transitive Vite 8 / SvelteKit peer dep from
+          # @vercel/analytics. See the lockfile-sync guard test in
+          # tests/unit/lockfile.test.ts.
+          npm ci --legacy-peer-deps
 
       - name: Validate (lint + type-check + unit)
         run: npm run validate
@@ -47,7 +58,7 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build
         run: npm run build
@@ -66,7 +77,7 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Cache Playwright browsers
         id: playwright-cache
