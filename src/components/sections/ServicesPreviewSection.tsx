@@ -92,9 +92,10 @@ export function ServicesPreviewSection() {
                   </Text>
                   <Link
                     href={`/services#${service.id}`}
+                    aria-label={`Learn more about ${service.name}`}
                     className="mt-auto inline-flex items-center gap-1 self-start pt-2 text-small text-muted-foreground hover:text-foreground"
                   >
-                    Learn more
+                    <span aria-hidden="true">Learn more</span>
                     <ArrowUpRightIcon aria-hidden />
                   </Link>
                 </article>
