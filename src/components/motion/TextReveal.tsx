@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import { m, useReducedMotion, type Variants } from "motion/react";
 import { useMemo } from "react";
 import { cn } from "@/lib/cn";
 
@@ -80,7 +80,7 @@ export function TextReveal({
   const Tag = as as keyof React.JSX.IntrinsicElements;
 
   return (
-    <motion.span
+    <m.span
       // @ts-expect-error — `as` is a constrained string; JSX type
       // inference is broader than our prop allows.
       as={Tag}
@@ -102,16 +102,16 @@ export function TextReveal({
         /^\s+$/.test(word) ? (
           <span key={i}>{word}</span>
         ) : (
-          <motion.span
+          <m.span
             key={i}
             variants={wordVariants}
             className="inline-block"
             aria-hidden
           >
             {word}
-          </motion.span>
+          </m.span>
         ),
       )}
-    </motion.span>
+    </m.span>
   );
 }

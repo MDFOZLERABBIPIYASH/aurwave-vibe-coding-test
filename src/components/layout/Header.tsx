@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { m, AnimatePresence, useReducedMotion } from "motion/react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Link } from "@/components/ui/Link";
@@ -122,7 +122,7 @@ export function Header() {
 
       <AnimatePresence>
         {open ? (
-          <motion.div
+          <m.div
             id="mobile-menu"
             ref={panelRef}
             role="dialog"
@@ -142,7 +142,7 @@ export function Header() {
               >
                 <ul className="flex flex-col gap-2">
                   {primaryNav.map((item, i) => (
-                    <motion.li
+                    <m.li
                       key={item.href}
                       initial={reduced ? false : { opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -159,7 +159,7 @@ export function Header() {
                       >
                         {item.label}
                       </Link>
-                    </motion.li>
+                    </m.li>
                   ))}
                 </ul>
                 <div className="flex flex-col gap-3">
@@ -182,7 +182,7 @@ export function Header() {
                 </div>
               </nav>
             </Container>
-          </motion.div>
+          </m.div>
         ) : null}
       </AnimatePresence>
     </header>

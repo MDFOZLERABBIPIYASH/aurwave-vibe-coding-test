@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
 import { useRef, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
@@ -18,7 +18,7 @@ import { cn } from "@/lib/cn";
  * Implementation notes:
  *  - We measure the pointer's position relative to the element's
  *    center and scale the offset to a small max (`max: 6px`).
- *  - The element is wrapped in a `motion.div` so the rest of the
+ *  - The element is wrapped in an `m.div` so the rest of the
  *    layout is unaffected.
  *  - The inner content keeps its own positioning so the host's
  *    display/alignment doesn't break.
@@ -43,7 +43,7 @@ export function MagneticHover({
   }
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       className={cn("inline-block", className)}
       onMouseMove={(e) => {
@@ -78,6 +78,6 @@ export function MagneticHover({
       }}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

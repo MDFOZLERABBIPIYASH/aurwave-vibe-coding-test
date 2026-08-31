@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import { m, useReducedMotion, type Variants } from "motion/react";
 import type { ReactNode } from "react";
 
 /**
@@ -38,13 +38,13 @@ export function PageTransition({ children }: { children: ReactNode }) {
       };
 
   return (
-    <motion.div
+    <m.div
       initial="hidden"
       animate="show"
       variants={variants}
       className="min-h-[calc(100dvh-4rem)]"
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

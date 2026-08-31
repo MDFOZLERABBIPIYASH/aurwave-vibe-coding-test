@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants, type MotionProps } from "motion/react";
+import { m, useReducedMotion, type Variants, type MotionProps } from "motion/react";
 import type { ReactNode, ElementType } from "react";
 import { cn } from "@/lib/cn";
 
@@ -61,7 +61,7 @@ export function Reveal({
         },
       };
 
-  const MotionTag = motion[as as keyof typeof motion] as typeof motion.div;
+  const MotionTag = m[as as keyof typeof m] as typeof m.div;
 
   return (
     <MotionTag

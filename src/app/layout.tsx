@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { LazyMotion, domAnimation } from "motion/react";
 import "@/styles/globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -57,6 +58,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+        {/*
+          LazyMotion with `domAnimation` features: tree-shakes
+          motion's full bundle (gestures, layout, drag) down to the
+          ~21 KiB of features we actually use (initial, animate,
+          whileInView, variants, AnimatePresence). The savings show
+          up as reduced mobile TBT in Lighthouse.
+        */}
+        <LazyMotion features={domAnimation} strict>
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-small focus:text-background focus:shadow-lg"
@@ -76,6 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         */}
         <Analytics />
         <SpeedInsights />
+        </LazyMotion>
       </body>
     </html>
   );

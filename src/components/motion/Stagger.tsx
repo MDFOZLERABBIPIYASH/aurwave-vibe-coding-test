@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import { m, useReducedMotion, type Variants } from "motion/react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
  * Stagger — viewport-triggered entrance for a list of children.
  *
  * Use this to coordinate a sequence of `<Reveal>` blocks (or plain
- * `<motion.*>` elements) so they enter with a small offset. Children
+ * `<m.*>` elements) so they enter with a small offset. Children
  * can be anything; the container just propagates the `initial` /
  * `animate` state via Framer Motion's `staggerChildren` orchestration.
  *
@@ -60,7 +60,7 @@ export function Stagger({
       };
 
   return (
-    <motion.div
+    <m.div
       className={cn(className)}
       initial="hidden"
       whileInView="show"
@@ -68,6 +68,6 @@ export function Stagger({
       variants={variants}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
