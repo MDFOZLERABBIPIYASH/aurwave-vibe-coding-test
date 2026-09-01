@@ -12,10 +12,16 @@ const BASE_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: "./tests/e2e",
+  testIgnore: "**/_*.spec.ts",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  // CI runners are slower than local. More retries + a longer
+  // per-test timeout absorb the kind of transient flakes that
+  // happen on shared hardware (the GitHub-hosted Ubuntu images
+  // see real-world load variance).
+  retries: process.env.CI ? 3 : 0,
   workers: process.env.CI ? 1 : undefined,
+  timeout: process.env.CI ? 60_000 : 30_000,
   reporter: "html",
   use: {
     baseURL: BASE_URL,

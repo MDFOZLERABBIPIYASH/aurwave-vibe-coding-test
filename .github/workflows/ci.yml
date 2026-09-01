@@ -103,9 +103,14 @@ jobs:
         # Bump the job timeout to give it room on slow runners.
         # `--reporter=line,json` sends a compact line-based summary
         # to stdout so failures show up in the GitHub UI log without
-        # needing to download the Playwright HTML report.
+        # needing to download the Playwright HTML report. We also
+        # bump the per-test timeout from the default 30s to 60s —
+        # the CI runner is noticeably slower than local and the
+        # 30s budget is too tight for some axe-core runs.
         run: npx playwright test --reporter=line,json
         timeout-minutes: 15
+        env:
+          PLAYWRIGHT_TIMEOUT: 60000
 
       - name: Print failed test summary
         if: failure()
@@ -118,7 +123,7 @@ jobs:
           if [ -d test-results ]; then
             find test-results -name "*.json" 2>/dev/null | head -30 | while read f; do
               echo "--- $f ---"
-              cat "$f" | head -c 3000
+              cat "$f" | head -c 4000
               echo
               echo
             done
