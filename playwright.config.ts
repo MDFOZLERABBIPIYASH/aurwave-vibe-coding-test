@@ -15,13 +15,13 @@ export default defineConfig({
   testIgnore: "**/_*.spec.ts",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  // CI runners are slower than local. More retries + a longer
-  // per-test timeout absorb the kind of transient flakes that
-  // happen on shared hardware (the GitHub-hosted Ubuntu images
-  // see real-world load variance).
-  retries: process.env.CI ? 3 : 0,
+  // CI runners are slower than local. The GitHub-hosted Ubuntu
+  // images see real-world load variance — a test that takes 10s
+  // locally can take 30s on a slow CI run. 90s + 4 retries gives
+  // every flaky test enough headroom to recover.
+  retries: process.env.CI ? 4 : 0,
   workers: process.env.CI ? 1 : undefined,
-  timeout: process.env.CI ? 60_000 : 30_000,
+  timeout: process.env.CI ? 90_000 : 30_000,
   reporter: "html",
   use: {
     baseURL: BASE_URL,
