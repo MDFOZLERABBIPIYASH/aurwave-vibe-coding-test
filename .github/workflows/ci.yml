@@ -103,14 +103,13 @@ jobs:
         # Bump the job timeout to give it room on slow runners.
         # `--reporter=line,json` sends a compact line-based summary
         # to stdout so failures show up in the GitHub UI log without
-        # needing to download the Playwright HTML report. We also
-        # bump the per-test timeout from the default 30s to 60s —
-        # the CI runner is noticeably slower than local and the
-        # 30s budget is too tight for some axe-core runs.
+        # needing to download the Playwright HTML report. The
+        # per-test timeout and retry count are configured in
+        # playwright.config.ts (60s + 3 retries in CI, which is
+        # high enough to absorb the slow-runner flakes we've been
+        # seeing).
         run: npx playwright test --reporter=line,json
         timeout-minutes: 15
-        env:
-          PLAYWRIGHT_TIMEOUT: 60000
 
       - name: Print failed test summary
         if: failure()
@@ -121,16 +120,22 @@ jobs:
         run: |
           echo "=== Failing test summary ==="
           if [ -d test-results ]; then
+            : > /tmp/playwright-failures.txt
             find test-results -name "*.json" 2>/dev/null | head -30 | while read f; do
-              echo "--- $f ---"
-              cat "$f" | head -c 4000
-              echo
-              echo
+              {
+                echo "--- $f ---"
+                cat "$f" | head -c 4000
+                echo
+                echo
+              } >> /tmp/playwright-failures.txt
             done
+            echo "=== Wrote /tmp/playwright-failures.txt ($(wc -l < /tmp/playwright-failures.txt) lines) ==="
+            cat /tmp/playwright-failures.txt
           else
             echo "No test-results directory found."
-            echo "Listing playwright-report contents:"
-            ls -la playwright-report/ 2>/dev/null || echo "No playwright-report dir either."
+            echo "Working directory: $(pwd)"
+            echo "Listing contents:"
+            ls -la
           fi
 
       - name: Upload Playwright report on failure
@@ -141,4 +146,5 @@ jobs:
           path: |
             playwright-report
             test-results
+            /tmp/playwright-failures.txt
           retention-days: 7
