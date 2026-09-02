@@ -94,9 +94,20 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
 
+      - name: Install Playwright system deps
+        # WebKit (and the chromium variants) need a handful of system
+        # shared libraries (libevent, libgstreamer-plugins-base, etc.)
+        # that aren't pre-installed on `ubuntu-latest`. Run
+        # `install-deps` as a separate step so they survive the
+        # browser cache: when the cache hits, the binary is restored
+        # but `install --with-deps` would be skipped. `install-deps`
+        # is a no-op if the packages are already installed, so it's
+        # cheap on every run.
+        run: npx playwright install-deps
+
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
+        run: npx playwright install
 
       - name: Run E2E tests
         # E2E takes ~3-4 min locally with the full 4-project matrix.
@@ -118,24 +129,14 @@ jobs:
         # download the Playwright HTML report. Playwright writes
         # per-test JSON files to test-results/ on failure.
         run: |
-          echo "=== Failing test summary ==="
           if [ -d test-results ]; then
-            : > /tmp/playwright-failures.txt
+            echo "=== Failing test summary ==="
             find test-results -name "*.json" 2>/dev/null | head -30 | while read f; do
-              {
-                echo "--- $f ---"
-                cat "$f" | head -c 4000
-                echo
-                echo
-              } >> /tmp/playwright-failures.txt
+              echo "--- $f ---"
+              cat "$f" | head -c 3000
+              echo
+              echo
             done
-            echo "=== Wrote /tmp/playwright-failures.txt ($(wc -l < /tmp/playwright-failures.txt) lines) ==="
-            cat /tmp/playwright-failures.txt
-          else
-            echo "No test-results directory found."
-            echo "Working directory: $(pwd)"
-            echo "Listing contents:"
-            ls -la
           fi
 
       - name: Upload Playwright report on failure
@@ -146,5 +147,4 @@ jobs:
           path: |
             playwright-report
             test-results
-            /tmp/playwright-failures.txt
           retention-days: 7

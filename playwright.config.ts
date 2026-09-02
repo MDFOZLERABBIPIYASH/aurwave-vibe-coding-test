@@ -17,11 +17,12 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   // CI runners are slower than local. The GitHub-hosted Ubuntu
   // images see real-world load variance — a test that takes 10s
-  // locally can take 30s on a slow CI run. 90s + 4 retries gives
-  // every flaky test enough headroom to recover.
-  retries: process.env.CI ? 4 : 0,
+  // locally can take 30s on a slow CI run. 2 retries + 60s
+  // timeout gives every flaky test enough headroom to recover
+  // without masking real bugs behind long timeouts.
+  retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  timeout: process.env.CI ? 90_000 : 30_000,
+  timeout: process.env.CI ? 60_000 : 30_000,
   reporter: "html",
   use: {
     baseURL: BASE_URL,
